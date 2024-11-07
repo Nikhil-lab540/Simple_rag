@@ -33,19 +33,19 @@ llm=ChatGroq(groq_api_key=groq_api_key,
              model_name="mixtral-8x7b-32768")
 uploaded_file = st.file_uploader("Place ur pdf")
 
-
-if "vector" not in st.session_state:
+if uploaded_file:
+    if "vector" not in st.session_state:
+        
+        with open("uploaded_document.pdf", "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.session_state.embeddings=GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        st.session_state.loader=PyPDFLoader("uploaded_document.pdf")
+        st.session_state.docs=st.session_state.loader.load()
     
-    with open("uploaded_document.pdf", "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    st.session_state.embeddings=GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    st.session_state.loader=PyPDFLoader("uploaded_document.pdf")
-    st.session_state.docs=st.session_state.loader.load()
-
-    st.session_state.text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200)
-    st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs[:50])
-    st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents,st.session_state.embeddings)
-
+        st.session_state.text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200)
+        st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs[:50])
+        st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents,st.session_state.embeddings)
+    
 
 prompt=ChatPromptTemplate.from_template(
 """
