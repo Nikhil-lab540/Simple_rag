@@ -31,10 +31,11 @@ def hide_streamlit_style():
 hide_streamlit_style()
 llm=ChatGroq(groq_api_key=groq_api_key,
              model_name="mixtral-8x7b-32768")
-uploaded_file = st.file_uploader("Place ur pdf")
+
 
 
 if "vector" not in st.session_state:
+    uploaded_file = st.file_uploader("Place ur pdf")
     
     with open("uploaded_document.pdf", "wb") as f:
         f.write(uploaded_file.getbuffer())
