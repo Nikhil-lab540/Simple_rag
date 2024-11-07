@@ -33,9 +33,9 @@ llm=ChatGroq(groq_api_key=groq_api_key,
              model_name="mixtral-8x7b-32768")
 
 
-
-if "vector" not in st.session_state:
-    uploaded_file = st.file_uploader("Place ur pdf")
+uploaded_file = st.file_uploader("Place ur pdf")
+if uploaded_file:
+    
     
     with open("uploaded_document.pdf", "wb") as f:
         f.write(uploaded_file.getbuffer())
